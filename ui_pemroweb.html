@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Menampilkan Data dari API ke dalam DataTable menggunakan AJAX</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css"
+    />
+  </head>
+  <body>
+    <table id="data-table" class="display" style="width: 100%">
+      <thead>
+        <tr>
+          <th>Cateogry</th>
+          <th>Location type</th>
+          <th>ID</th>
+          <th>Month</th>
+        </tr>
+      </thead>
+    </table>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        var dataTable = $("#data-table").DataTable({
+          ajax: {
+            url:
+              "https://data.police.uk/api/crimes-street/all-crime?lat=52.629729&lng=-1.131592&date=2023-01",
+            dataSrc: "",
+          },
+          columns: [
+            { data: "category" },
+            { data: "location_type" },
+            { data: "id" },
+            { data: "month" },
+          ],
+        });
+
+        $("form").on("submit", function (event) {
+          event.preventDefault();
+
+          var category = $("#category").val();
+          var locationType = $("#location_type").val();
+          var id = $("#id").val();
+          var dateMonth = $("#date_month").val();
+
+          if (category === "" || locationType === "" || id === "" || dateMonth === "") {
+            alert("Please fill in all fields");
+          } else {
+            dataTable.row.add([category, locationType, id, dateMonth]).draw(false);
+            $("form")[0].reset();
+            alert("New record submitted successfully");
+          }
+        });
+      });
+    </script>
+    <form action="">
+      <table>
+        <tr>
+          <th>
+            <td>
+              <input type="text" name="category" id="category" placeholder="Enter category">
+            </td>
+          </th>
+          <th>
+            <td>
+              <input type="text" name="location_type" id="location_type" placeholder="Enter Location type">
+            </td>
+          </th>
+          <th>
+            <td>
+              <input type="text" name="id" id="id" placeholder="Enter ID">
+            </td>
+          </th>
+          <th>
+            <td>
+              <input type="month" name="date_month" id="date_month" placeholder="Masukkan tanggal">
+            </td>
+          </th>
+          <th>
+            <td>
+              <input type="submit" value="Submit">
+            </td>
+          </th>
+        </tr>
+      </table>
+    </form>
+  </body>
+</html>
